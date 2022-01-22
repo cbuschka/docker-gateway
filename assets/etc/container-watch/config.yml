@@ -1,0 +1,6 @@
+#
+# config.yml - container-watch config
+#
+templateFile: /etc/container-watch/template.tmpl
+outputFile: /etc/nginx/generated.d/ingress.conf
+reloadCommand: /etc/init.d/nginx reload
