@@ -16,6 +16,7 @@ server {
  include /etc/nginx/snippets.d/std.conf;
  include /etc/nginx/snippets.d/gzip-server-setup.conf;
  include /etc/nginx/snippets.d/protect-internal.conf;
+ include /etc/nginx/snippets.d/letsencrypt-site.conf;
  location / {
   {{if .SslEnabled}}
   return 301 https://{{.Name}}$request_uri; # redirect all requests to https endpoint
@@ -32,6 +33,7 @@ server {
  include /etc/nginx/snippets.d/std.conf;
  include /etc/nginx/snippets.d/gzip-server-setup.conf;
  include /etc/nginx/snippets.d/protect-internal.conf;
+ include /etc/nginx/snippets.d/letsencrypt-site.conf;
  location / {
   proxy_pass http://{{.Key}}; # pass on
  }
