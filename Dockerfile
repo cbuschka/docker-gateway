@@ -6,7 +6,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV LANG en_US.utf8
 RUN echo "deb http://ftp.debian.org/debian bullseye-backports main" > /etc/apt/sources.list.d/bullseye_backports.list && \
 	DEBIAN_FRONTEND=noninteractive apt-get update && \
-	apt-get install -y --no-install-recommends apt-utils curl gnupg apt-transport-https supervisor ca-certificates dirmngr locales bzip2 && \
+    apt-get install -y --no-install-recommends apt-utils curl gnupg apt-transport-https supervisor ca-certificates dirmngr locales bzip2 && \
+    apt-get install -y --no-install-recommends certbot python3-certbot-nginx -t bullseye-backports && \
 	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
 	apt-get clean && \
 	apt-get autoremove -y && \
@@ -22,7 +23,8 @@ RUN echo "deb http://nginx.org/packages/mainline/debian/ bullseye nginx" > /etc/
 	rm -rf /var/lib/apt/lists/*
 
 ADD assets /
-RUN mkdir -p /etc/nginx/generated.d/
+RUN rm /etc/nginx/sites-enabled/default && \
+    mkdir -p /var/lib/letsencrypt/www/ /etc/nginx/generated.d/
 
 EXPOSE 80 443
 
