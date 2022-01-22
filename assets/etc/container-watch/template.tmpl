@@ -13,10 +13,36 @@ upstream {{.Key}} {
 server {
  listen 80;
  server_name {{.Name}};
+ include /etc/nginx/snippets.d/std.conf;
+ include /etc/nginx/snippets.d/gzip-server-setup.conf;
+ include /etc/nginx/snippets.d/protect-internal.conf;
  location / {
-  proxy_pass http://{{.Key}};
+  {{if .SslEnabled}}
+  return 301 https://{{.Name}}$request_uri; # redirect all requests to https endpoint
+  {{else}}
+  proxy_pass http://{{.Key}}; # pass on
+  {{end}}
  }
 }
+
+{{if .SslEnabled}}
+server {
+ listen 443 ssl;
+ server_name {{.Name}};
+ include /etc/nginx/snippets.d/std.conf;
+ include /etc/nginx/snippets.d/gzip-server-setup.conf;
+ include /etc/nginx/snippets.d/protect-internal.conf;
+ location / {
+  proxy_pass http://{{.Key}}; # pass on
+ }
+
+ include /etc/nginx/snippets.d/ssl.conf;
+ ssl_certificate      {{.SslCertificateFile}};
+ ssl_certificate_key  {{.SslKeyFile}};
+ ssl_trusted_certificate {{.SslCertifcateChainFile}};
+}
+{{end}}
+
 {{end}}
 
 ### end of generated part

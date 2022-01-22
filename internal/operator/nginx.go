@@ -22,7 +22,13 @@ func (w *Watcher) handle() error {
 		domainKey := toDomainKey(container.DomainName)
 		domain, domainFound := domainsByKey[domainKey]
 		if !domainFound {
-			domain = generator.DomainData{Key: domainKey, Name: container.DomainName, Hosts: []generator.HostData{}}
+			domain = generator.DomainData{Key: domainKey,
+				Name:                   container.DomainName,
+				Hosts:                  []generator.HostData{},
+				SslEnabled:             true,
+				SslCertificateFile:     "/etc/ssl/certs/selfsigned.crt",
+				SslKeyFile:             "/etc/ssl/private/selfsigned.key",
+				SslCertifcateChainFile: "/etc/ssl/certs/selfsigned.crt"}
 		}
 
 		host := generator.HostData{ContainerName: container.Name,

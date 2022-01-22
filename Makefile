@@ -21,7 +21,7 @@ build-container:
 	docker build -t gateway:local .
 
 run-container:
-	docker run --name gw --rm -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 gateway:local
+	docker run --name gw --rm -v /var/run/docker.sock:/var/run/docker.sock -p 80:80 -p 443:443 gateway:local
 
 start-example-container:
 	docker run -d --rm --name nginx --label=ingress-domain=www.example.com nginx
